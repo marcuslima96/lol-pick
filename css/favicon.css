@@ -1,0 +1,20 @@
+
+.favicon-container {
+    width: 32px;
+    height: 32px;
+    background-color: #091428;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #C89B3C;
+    box-shadow: 0 0 5px #C89B3C;
+}
+
+.favicon-text {
+    color: #C89B3C;
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+    text-transform: uppercase;
+}
