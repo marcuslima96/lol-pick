@@ -38,7 +38,11 @@ body {
     background-position: center;
     background-attachment: fixed;
     background-blend-mode: overlay;
-    
+  
+    user-select: none;
+    -webkit-user-select: none; /* Para Safari */
+    -moz-user-select: none;    /* Para Firefox */
+    -ms-user-select: none;     /* Para Internet Explorer/Edge antigo */
 }
 
 .container {
@@ -190,6 +194,7 @@ header p {
 #champion-card {
     background: var(--card-background);
     border: 3px solid var(--border-color);
+    min-height: 600px;
     border-radius: 8px;
     overflow: visible;
     width: 100%;
@@ -252,6 +257,9 @@ header p {
     padding-bottom: 56.25%; /* 16:9 aspect ratio */
     position: relative;
     overflow: hidden;
+    border-bottom:  2px solid var(--button-color);
+
+
 }
 
 .champion-splash img {
@@ -280,6 +288,7 @@ header p {
     text-transform: uppercase;
     letter-spacing: 1px;
 }
+
 
 .champion-abilities {
     display: flex;
