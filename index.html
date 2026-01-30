@@ -5,109 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sorteador de Campeões LoL</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/animations.css">
-    <link rel="stylesheet" href="css/background.css">
-    <link rel="stylesheet" href="css/tooltips.css">
-    <link rel="stylesheet" href="css/animation-effects.css">
     <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
-    <meta name="description" content="Sorteie campeões de League of Legends por lane e descubra novos personagens para jogar!">
+    <meta name="description" content="Sorteie campeões de League of Legends por lane!">
 </head>
 <body>
     <div class="container">
+        
         <header>
             <h1>Sorteador de Campeões</h1>
             <p>Escolha uma lane e descubra seu próximo campeão!</p>
         </header>
 
         <div class="lane-selector">
-            <button class="lane-btn" data-lane="top">
-                <img src="assets/images/Top.png" alt="Top" />
-            </button>
-            <button class="lane-btn" data-lane="jungle">
-                <img src="assets/images/Jungle.png" alt="Jungle" />
-            </button>
-            <button class="lane-btn" data-lane="mid">
-                <img src="assets/images/Mid.png" alt="Mid" />
-            </button>
-            <button class="lane-btn" data-lane="adc">
-                <img src="assets/images/Bot.png" alt="ADC" />
-            </button>
-            <button class="lane-btn" data-lane="support">
-                <img src="assets/images/Support.png" alt="Support" />
-            </button>
+            <div class="lane-buttons">
+                <button class="lane-btn" data-lane="top"><img src="assets/images/Top.png" alt="Top" /></button>
+                <button class="lane-btn" data-lane="jungle"><img src="assets/images/Jungle.png" alt="Jungle" /></button>
+                <button class="lane-btn" data-lane="mid"><img src="assets/images/Mid.png" alt="Mid" /></button>
+                <button class="lane-btn" data-lane="bot"><img src="assets/images/Bot.png" alt="ADC" /></button>
+                <button class="lane-btn" data-lane="support"><img src="assets/images/Support.png" alt="Support" /></button>
+            </div>
             <div class="selected-lane">
                 <p>Lane selecionada: <span id="current-lane">Nenhuma</span></p>
             </div>
         </div>
 
-    </div>
-    <div class="champion-display">
-        <div id="champion-card" class="hidden">
-            <div class="champion-splash">
-                <img id="champion-image" src="assets/images/fundo.png" alt="" >
-                <div class="sorting-animation">
+        <div class="summon-stage">
+            
+            <div id="summon-effect" class="summon-effect"></div>
+
+            <div id="champion-card" class="hidden">
+                
+                <div class="champion-splash">
+                    <img id="champion-img" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Campeão" class="empty">
+                    
+                    <div class="text-overlay"></div>
+
+                    <div class="champion-info">
+                        <h2 id="champion-name">Nome do Campeão</h2>
+                        <h3 id="champion-title">Título do Campeão</h3>
+                    </div>
                 </div>
-            </div>
-            <div class="champion-info">
-                <h2 id="champion-name"></h2>
+
                 <div class="champion-abilities">
                     <div class="ability-container">
-                        <img id="passive" src="assets/images/habilidade.png" alt=" " class="empty">
-                        <div class="tooltip">
-                            <h4 id="passive-name">Passiva</h4>
-                            <p id="passive-desc">Descrição da habilidade passiva do campeão.</p>
-                        </div>
+                        <img id="passive-skill" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="P" class="skill-icon empty">
+                        <div class="tooltip"><h4 id="passive-name">Passiva</h4><p id="passive-desc">...</p></div>
                     </div>
                     <div class="ability-container">
-                        <img id="q-skill" src="assets/images/habilidade.png" alt=" " class="empty">
-                        <div class="tooltip">
-                            <h4 id="q-name">Habilidade Q</h4>
-                            <p id="q-desc">Descrição da habilidade Q do campeão.</p>
-                        </div>
+                        <img id="q-skill" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Q" class="skill-icon empty">
+                        <div class="tooltip"><h4 id="q-name">Q</h4><p id="q-desc">...</p></div>
                     </div>
                     <div class="ability-container">
-                        <img id="w-skill" src="assets/images/habilidade.png" alt=" " class="empty">
-                        <div class="tooltip">
-                            <h4 id="w-name">Habilidade W</h4>
-                            <p id="w-desc">Descrição da habilidade W do campeão.</p>
-                        </div>
+                        <img id="w-skill" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="W" class="skill-icon empty">
+                        <div class="tooltip"><h4 id="w-name">W</h4><p id="w-desc">...</p></div>
                     </div>
                     <div class="ability-container">
-                        <img id="e-skill" src="assets/images/habilidade.png" alt=" " class="empty">
-                        <div class="tooltip">
-                            <h4 id="e-name">Habilidade E</h4>
-                            <p id="e-desc">Descrição da habilidade E do campeão.</p>
-                        </div>
+                        <img id="e-skill" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="E" class="skill-icon empty">
+                        <div class="tooltip"><h4 id="e-name">E</h4><p id="e-desc">...</p></div>
                     </div>
                     <div class="ability-container">
-                        <img id="r-skill" src="assets/images/habilidade.png" alt=" " class="empty">
-                        <div class="tooltip">
-                            <h4 id="r-name">Habilidade Ultimate (R)</h4>
-                            <p id="r-desc">Descrição da habilidade ultimate do campeão.</p>
-                        </div>
+                        <img id="r-skill" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="R" class="skill-icon empty">
+                        <div class="tooltip"><h4 id="r-name">R</h4><p id="r-desc">...</p></div>
                     </div>
                 </div>
-                <a id="champion-link" href="#" target="_blank" rel="noopener noreferrer">Ver página oficial</a>
-            </div>
-            <div class="randomize-section">
-                <button id="randomize-btn" disabled>
-                    <img src="assets/images/dados.png" alt="Sortear" class="icon">
-                </button>
+
             </div>
         </div>
-        
+
+        <section class="randomize-section">
+            <button id="randomize-btn" disabled>
+                <img src="assets/images/dados.png" alt="Sortear" class="icon">
+                SORTEAR
+            </button>
+        </section>
+
     </div>
 
     <footer>
-        <p>
-            League of Legends e todos os seus personagens são propriedade da Riot Games, Inc. <br>
-            Este site não é endossado pela Riot Games e não representa uma entidade oficial da empresa. <br>
-            Imagens e conteúdo usados sob a política de conteúdo legal da Riot: 
-            <a href="https://www.riotgames.com/pt-br/juridico" target="_blank">riotgames.com/legal</a>
-       
-        <address>
-            Criado por: MarkiN #SCCP
-          </address>
+        <p>League of Legends e todos os seus personagens são propriedade da Riot Games, Inc.</p>
+        <address>Criado por: MarkiN #SCCP</address>
     </footer>
 
     <script src="js/data-dragon-api.js"></script>
