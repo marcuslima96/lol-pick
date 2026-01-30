@@ -1,250 +1,203 @@
-// Variáveis globais
-let selectedLane = null;
-let champions = null;
-let abilitiesData = null;
+const LANE_MAPPING = {
+    top: [
+        'Aatrox', 'Akali', 'Ambessa', 'Anivia', 'Aurora', 'Camille', 'Cassiopeia', 
+        'Chogath', 'Darius', 'DrMundo', 'Fiora', 'Gangplank', 'Garen', 'Gnar', 
+        'Gragas', 'Gwen', 'Heimerdinger', 'Illaoi', 'Irelia', 'Jax', 'Jayce', 
+        'KSante', 'Kayle', 'Kennen', 'Kled', 'Malphite', 'MasterYi', 'Mordekaiser', 
+        'Naafiri', 'Nasus', 'Olaf', 'Ornn', 'Pantheon', 'Poppy', 'Quinn', 
+        'Renekton', 'Riven', 'Rumble', 'Ryze', 'Sejuani', 'Sett', 'Shen', 
+        'Singed', 'Sion', 'Swain', 'Sylas', 'TahmKench', 'Teemo', 'Trundle', 
+        'Tryndamere', 'Udyr', 'Urgot', 'Varus', 'Vayne', 'Vladimir', 'Volibear', 
+        'Warwick', 'Wukong', 'Yasuo', 'Yone', 'Yorick', 'Zaahen', 'Zac'
+    ],
+    jungle: [
+        'Aatrox', 'Ambessa', 'Amumu', 'Belveth', 'Briar', 'Diana', 'DrMundo', 
+        'Ekko', 'Elise', 'Evelynn', 'Fiddlesticks', 'Gragas', 'Graves', 'Gwen', 
+        'Hecarim', 'Ivern', 'JarvanIV', 'Jax', 'Jayce', 'Karthus', 'Kayn', 
+        'Khazix', 'Kindred', 'LeeSin', 'Lillia', 'Malphite', 'MasterYi', 
+        'Naafiri', 'Nidalee', 'Nocturne', 'Nunu', 'Pantheon', 'Qiyana', 
+        'Rammus', 'RekSai', 'Rengar', 'Sejuani', 'Shaco', 'Shyvana', 'Skarner', 
+        'Sylas', 'Taliyah', 'Talon', 'Trundle', 'Udyr', 'Vi', 'Viego', 
+        'Volibear', 'Warwick', 'Wukong', 'XinZhao', 'Zaahen', 'Zac', 'Zed', 
+        'Zyra'
+    ],
+    mid: [
+        'Ahri', 'Akali', 'Akshan', 'Anivia', 'Annie', 'AurelionSol', 'Aurora', 
+        'Azir', 'Brand', 'Cassiopeia', 'Chogath', 'Corki', 'Diana', 'Ekko', 
+        'Fizz', 'Galio', 'Hwei', 'Irelia', 'Kassadin', 'Katarina', 'Kayle', 
+        'Kennen', 'Leblanc', 'Lissandra', 'Lux', 'Malphite', 'Malzahar', 'Mel', 
+        'Morgana', 'Naafiri', 'Neeko', 'Orianna', 'Pantheon', 'Qiyana', 'Ryze', 
+        'Sion', 'Smolder', 'Swain', 'Sylas', 'Syndra', 'Taliyah', 'Talon', 
+        'Tristana', 'TwistedFate', 'Varus', 'Veigar', 'Velkoz', 'Vex', 'Viktor', 
+        'Vladimir', 'Xerath', 'Yasuo', 'Yone', 'Zed', 'Ziggs', 'Zoe'
+    ],
+    bot: [
+        'Aphelios', 'Ashe', 'Brand', 'Caitlyn', 'Corki', 'Draven', 'Ezreal', 
+        'Jhin', 'Jinx', 'KaiSa', 'Kalista', 'KogMaw', 'Lucian', 'Lux', 'Mel', 
+        'MissFortune', 'Nilah', 'Samira', 'Seraphine', 'Sivir', 'Smolder', 
+        'Swain', 'Tristana', 'Twitch', 'Varus', 'Vayne', 'Veigar', 'Xayah', 
+        'Yasuo', 'Yunara', 'Zeri', 'Ziggs'
+    ],
+    support: [
+        'Alistar', 'Ashe', 'Bard', 'Blitzcrank', 'Brand', 'Braum', 'Elise', 
+        'Fiddlesticks', 'Janna', 'Karma', 'Leblanc', 'Leona', 'Lulu', 'Lux', 
+        'Maokai', 'Mel', 'Milio', 'Morgana', 'Nami', 'Nautilus', 'Neeko', 
+        'Pantheon', 'Poppy', 'Pyke', 'Rakan', 'Rell', 'Renata', 'Senna', 
+        'Seraphine', 'Shaco', 'Sona', 'Soraka', 'Swain', 'TahmKench', 'Taric', 
+        'Thresh', 'Velkoz', 'Xerath', 'Yuumi', 'Zilean', 'Zoe', 'Zyra'
+    ]
+};
 
-// Cache para armazenar dados de habilidades já carregados
-let abilitiesCache = {};
+let allChampionsData = {};
+let currentLane = null;
 
-// Inicialização quando o DOM estiver carregado
-document.addEventListener('DOMContentLoaded', () => {
-    // Carregar dados dos campeões
-    loadChampionData();
-    
-    // Carregar dados das habilidades
-    loadAbilitiesData();
-    
-    // Configurar eventos dos botões de lane
+document.addEventListener('DOMContentLoaded', async () => {
+    if (typeof DataDragonAPI === 'undefined') {
+        alert("ERRO CRÍTICO: O arquivo 'js/data-dragon-api.js' não foi carregado.");
+        return;
+    }
+    await initApp();
     setupLaneButtons();
-    
-    // Configurar evento do botão de sorteio
-    setupRandomizeButton();
-    
-    // Mostrar o card do campeão vazio inicialmente
-    document.getElementById('champion-card').classList.remove('hidden');
+    document.getElementById('randomize-btn').addEventListener('click', randomizeChampion);
 });
 
-// Função para carregar os dados dos campeões do arquivo JSON
-async function loadChampionData() {
-    try {
-        const response = await fetch('data/champions.json');
-        champions = await response.json();
-        console.log('Dados dos campeões carregados com sucesso!');
-    } catch (error) {
-        console.error('Erro ao carregar dados dos campeões:', error);
-    }
-}   
-
-// Função para carregar os dados das habilidades do arquivo JSON
-async function loadAbilitiesData() {
-    try {
-        const response = await fetch('data/abilities.json');
-        abilitiesData = await response.json();
-        console.log('Dados das habilidades carregados com sucesso!');
-    } catch (error) {
-        console.error('Erro ao carregar dados das habilidades:', error);
+async function initApp() {
+    const data = await DataDragonAPI.fetchChampionsList();
+    if (data) {
+        allChampionsData = data;
+        console.log('API pronta.');
+    } else {
+        alert('Erro ao conectar com a Riot Games. Verifique sua internet.');
     }
 }
 
-// Configurar eventos dos botões de lane
 function setupLaneButtons() {
-    const laneButtons = document.querySelectorAll('.lane-btn');
-    
-    laneButtons.forEach(button => {
-        // Evento de clique
-        button.addEventListener('click', () => {
-            // Remover classe ativa de todos os botões
-            laneButtons.forEach(btn => btn.classList.remove('active'));
-            
-            // Adicionar classe ativa ao botão clicado
-            button.classList.add('active');
-            
-            // Atualizar lane selecionada
-            selectedLane = button.getAttribute('data-lane');
-            document.getElementById('current-lane').textContent = getLaneName(selectedLane);
-            
-            // Habilitar botão de sorteio
-            const randomizeBtn = document.getElementById('randomize-btn');
+    const buttons = document.querySelectorAll('.lane-btn');
+    const laneTitle = document.getElementById('current-lane');
+    const randomizeBtn = document.getElementById('randomize-btn');
+
+    buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            buttons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentLane = btn.dataset.lane;
+            laneTitle.textContent = `Rota: ${currentLane.toUpperCase()}`;
             randomizeBtn.disabled = false;
-            
-            // Adicionar animação ao botão de sorteio
-            randomizeBtn.classList.add('pulse');
-            setTimeout(() => {
-                randomizeBtn.classList.remove('pulse');
-            }, 1000);
         });
     });
 }
 
-// Obter nome da lane em português
-function getLaneName(lane) {
-    const laneNames = {
-        'top': 'Topo',
-        'jungle': 'Selva',
-        'mid': 'Meio',
-        'adc': 'Atirador',
-        'support': 'Suporte'
-    };
-    
-    return laneNames[lane] || 'Desconhecida';
+async function randomizeChampion() {
+    if (!currentLane || !allChampionsData) {
+        alert("Por favor, selecione uma rota primeiro!");
+        return;
+    }
+
+    const randomizeBtn = document.getElementById('randomize-btn');
+    const card = document.getElementById('champion-card');
+
+    if (randomizeBtn) randomizeBtn.disabled = true;
+
+    clearCardData(); 
+
+    const possibleChampions = LANE_MAPPING[currentLane];
+    const randomId = possibleChampions[Math.floor(Math.random() * possibleChampions.length)];
+    const championSummary = allChampionsData[randomId];
+
+    try {
+        const fullDetails = await DataDragonAPI.fetchChampionDetails(randomId);
+        
+        if (!fullDetails) throw new Error("Detalhes não encontrados");
+
+        updateBasicInfo(championSummary);
+        updateAbilities(fullDetails);
+
+        if (card) {
+            card.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                card.classList.add('visible');
+            });
+        }
+
+    } catch (error) {
+        console.error("Erro:", error);
+        alert("Erro ao buscar campeão.");
+    } finally {
+        resetUI();
+    }
 }
 
-// Configurar evento do botão de sorteio
-function setupRandomizeButton() {
-    const randomizeBtn = document.getElementById('randomize-btn');
+function resetUI() {
+    const btn = document.getElementById('randomize-btn');
+    if (btn) btn.disabled = false;
+}
+
+function clearCardData() {
+    document.getElementById('champion-name').textContent = 'Carregando...';
+    document.getElementById('champion-title').textContent = '';
     
-    // Evento de clique
-    randomizeBtn.addEventListener('click', () => {
-        if (!randomizeBtn.disabled) {
-            randomizeChampion();
-        }
+    const skills = ['passive', 'q', 'w', 'e', 'r'];
+    skills.forEach(slot => {
+        const img = document.getElementById(`${slot}-skill`);
+        const name = document.getElementById(`${slot}-name`);
+        const desc = document.getElementById(`${slot}-desc`);
+        
+        if(img) img.src = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
+        if(name) name.textContent = slot === 'passive' ? 'Passiva' : slot.toUpperCase();
+        if(desc) desc.textContent = '...';
     });
 }
 
-// Função para sortear um campeão
-function randomizeChampion() {
-    if (!selectedLane || !champions) return;
-    
-    // Obter lista de campeões da lane selecionada
-    const laneChampions = champions[selectedLane];
-    
-    if (!laneChampions || laneChampions.length === 0) {
-        console.error(`Nenhum campeão encontrado para a lane ${selectedLane}`);
-        return;
+function updateBasicInfo(champ) {
+    const nameEl = document.getElementById('champion-name');
+    if (nameEl) nameEl.textContent = champ.name; 
+    const titleEl = document.getElementById('champion-title');
+    if (titleEl) titleEl.textContent = champ.title; 
+    const imgEl = document.getElementById('champion-img');
+    if (imgEl) {        
+        
+        imgEl.style.opacity = "0"; 
+        imgEl.style.transition = "opacity 0.5s ease";
+
+        const imgUrl = `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${champ.id}_0.jpg`;
+        
+        imgEl.onload = () => {
+            imgEl.style.opacity = "1";
+        };
+
+        imgEl.src = imgUrl;
+        imgEl.classList.remove('empty');
+        imgEl.classList.remove('hidden');
+        imgEl.style.display = 'block'; 
     }
-    
-    // Sortear um campeão aleatório
-    const randomIndex = Math.floor(Math.random() * laneChampions.length);
-    const champion = laneChampions[randomIndex];
-    
-    // Iniciar animação de sorteio
-    startRandomizeAnimation(champion);
 }
 
-// Função para iniciar a animação de sorteio
-function startRandomizeAnimation(champion) {
-    // Mostrar o card do campeão
-    const championCard = document.getElementById('champion-card');
-    
-    // Iniciar o efeito de exibição do campeão
-    displayChampion(champion);
+function updateAbilities(details) {
+    const spells = details.spells;
+    const passive = details.passive;
+
+    updateSkillUI('passive', passive.name, passive.description, passive.image.full, true);
+    updateSkillUI('q', spells[0].name, spells[0].description, spells[0].image.full);
+    updateSkillUI('w', spells[1].name, spells[1].description, spells[1].image.full);
+    updateSkillUI('e', spells[2].name, spells[2].description, spells[2].image.full);
+    updateSkillUI('r', spells[3].name, spells[3].description, spells[3].image.full);
 }
 
-// Função para exibir o campeão sorteado
-async function displayChampion(champion) {
-    // Atualizar imagem do campeão
-    const championImage = document.getElementById('champion-image');
-    championImage.src = champion.image;
-    championImage.alt = champion.name;
-    
-    // Atualizar nome do campeão
-    document.getElementById('champion-name').textContent = champion.name;
-    
-    // Buscar dados reais das habilidades da API Data Dragon
-    let abilities = null;
-    
-    // Verificar se já temos os dados no cache
-    if (abilitiesCache[champion.name]) {
-        console.log(`Usando dados em cache para ${champion.name}`);
-        abilities = abilitiesCache[champion.name];
-    } else {
-        console.log(`Buscando dados da API para ${champion.name}`);
-        // Buscar dados da API
-        abilities = await window.DataDragonAPI.getChampionAbilities(champion.name);
-        
-        // Armazenar no cache se encontrou
-        if (abilities) {
-            abilitiesCache[champion.name] = abilities;
-        }
-    }
-    
-    // Atualizar ícones de habilidades e descrições
-    updateAbilityWithRealData('passive', champion.abilities.passive, champion.name, 'passive', abilities);
-    updateAbilityWithRealData('q-skill', champion.abilities.q, champion.name, 'q', abilities);
-    updateAbilityWithRealData('w-skill', champion.abilities.w, champion.name, 'w', abilities);
-    updateAbilityWithRealData('e-skill', champion.abilities.e, champion.name, 'e', abilities);
-    updateAbilityWithRealData('r-skill', champion.abilities.r, champion.name, 'r', abilities);
-    
-    // Atualizar link para a página oficial
-    const championLink = document.getElementById('champion-link');
-    championLink.href = champion.link;
-    
-    // Mostrar o card
-    const championCard = document.getElementById('champion-card');
-    championCard.classList.add('visible');
-    championCard.classList.remove('hidden');
-}
+function updateSkillUI(slot, name, desc, imgFile, isPassive = false) {
+    const type = isPassive ? 'passive' : 'spell';
+    const fullImgUrl = DataDragonAPI.getImageUrl(type, imgFile);
 
-// Função para atualizar uma habilidade
-function updateAbilityWithRealData(elementId, imageUrl, championName, abilityType, apiAbilities) {
-    const imgElement = document.getElementById(elementId);
-    imgElement.src = imageUrl;
-    imgElement.classList.remove('empty');
-    imgElement.classList.remove('error');
+    const imgId = `${slot}-skill`;
+    const imgEl = document.getElementById(imgId);
     
-    // Adicionar evento para tratar erros de carregamento
-    imgElement.onerror = function() {
-        this.classList.add('error');
-        console.warn(`Erro ao carregar imagem da habilidade: ${imageUrl}`);
-    };
-    
-    // Primeiro, tentar usar dados da API Data Dragon
-    if (apiAbilities && apiAbilities[abilityType]) {
-        const abilityData = apiAbilities[abilityType];
-        
-        // Atualizar nome da habilidade
-        const nameElement = document.getElementById(`${abilityType}-name`);
-        if (nameElement) {
-            nameElement.textContent = abilityData.name;
-        }
-        
-        // Atualizar descrição da habilidade
-        const descElement = document.getElementById(`${abilityType}-desc`);
-        if (descElement) {
-            // Remover tags HTML da descrição
-            const cleanDescription = abilityData.description.replace(/<[^>]*>/g, '');
-            descElement.textContent = cleanDescription;
-        }
-        
-        return;
+    if (imgEl) {
+        imgEl.src = fullImgUrl;
+        imgEl.classList.remove('empty');
     }
-    
-    // Fallback para dados do JSON local
-    if (abilitiesData && abilitiesData.champions[championName] && abilitiesData.champions[championName][abilityType]) {
-        const abilityData = abilitiesData.champions[championName][abilityType];
-        
-        // Atualizar nome da habilidade
-        const nameElement = document.getElementById(`${abilityType}-name`);
-        if (nameElement) {
-            nameElement.textContent = abilityData.name || `Habilidade ${abilityType.toUpperCase()}`;
-        }
-        
-        // Atualizar descrição da habilidade
-        const descElement = document.getElementById(`${abilityType}-desc`);
-        if (descElement) {
-            descElement.textContent = abilityData.description || `Descrição da habilidade ${abilityType.toUpperCase()} do campeão.`;
-        }
-    } else {
-        // Fallback para descrições genéricas
-        console.warn(`Dados de habilidade não encontrados para ${championName} - ${abilityType}`);
-        
-        // Atualizar nome da habilidade com valor genérico
-        const nameElement = document.getElementById(`${abilityType}-name`);
-        if (nameElement) {
-            const abilityNames = {
-                'passive': 'Passiva',
-                'q': 'Habilidade Q',
-                'w': 'Habilidade W',
-                'e': 'Habilidade E',
-                'r': 'Ultimate (R)'
-            };
-            nameElement.textContent = abilityNames[abilityType] || `Habilidade ${abilityType.toUpperCase()}`;
-        }
-        
-        // Atualizar descrição da habilidade com valor genérico
-        const descElement = document.getElementById(`${abilityType}-desc`);
-        if (descElement) {
-            descElement.textContent = `Descrição da habilidade ${abilityType.toUpperCase()} de ${championName}.`;
-        }
-    }
+
+    const nameEl = document.getElementById(`${slot}-name`);
+    if (nameEl) nameEl.textContent = name;
+
+    const descEl = document.getElementById(`${slot}-desc`);
+    if (descEl) descEl.innerHTML = desc;
 }
