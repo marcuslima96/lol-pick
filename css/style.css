@@ -1,4 +1,6 @@
-/* Estilos gerais e variáveis */
+/* =========================================
+   1. VARIÁVEIS E CONFIGURAÇÕES GERAIS
+   ========================================= */
 :root {
     --primary-color: #0A1428;
     --secondary-color: #091428;
@@ -22,11 +24,14 @@
 
 @font-face {
     font-family: 'Beaufort for LOL';
-    src: url('../assets/fonts/Beaufort for LOL Bold') format('woff2');
+    src: url(/fonts/Beaufort\ for\ LOL\ Bold.woff2) format('woff2');
     font-weight: bold;
     font-style: normal;
 }
 
+/* =========================================
+   2. BACKGROUND E AMBIENTAÇÃO
+   ========================================= */
 body {
     background: var(--background-gradient);
     color: var(--text-color);
@@ -34,30 +39,56 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    
+    /* Configurações de Fundo */
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
     background-blend-mode: overlay;
-  
+   
+    /* Previne seleção de texto */
     user-select: none;
-    -webkit-user-select: none; /* Para Safari */
-    -moz-user-select: none;    /* Para Firefox */
-    -ms-user-select: none;     /* Para Internet Explorer/Edge antigo */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+/* Imagem de Fundo */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url('https://universe.leagueoflegends.com/images/latestBg_Wallpaper.png');
+    background-size: cover;
+    background-position: center;
+    filter: blur(5px) brightness(0.3);
+    z-index: -2;
+}
+
+/* Overlay Escura */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(135deg, rgba(10, 20, 40, 0.9) 0%, rgba(9, 20, 40, 0.8) 100%);
+    z-index: -1;
 }
 
 .container {
+    gap: 1rem;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0px;
+    padding: 0;
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    
 }
 
-/* Cabeçalho */
+/* =========================================
+   3. CABEÇALHO
+   ========================================= */
 header {
     text-align: center;
     margin-bottom: 1rem;
@@ -79,12 +110,15 @@ header p {
     opacity: 0.9;
 }
 
-/* Seletor de Lane */
+/* =========================================
+   4. SELETOR DE LANE
+   ========================================= */
 .lane-selector {
-    margin-bottom: 1rem;
+    margin-bottom: 0rem;
     text-align: center;
 }
-.selected-lane{
+
+.selected-lane {
     display: none;
 }
 
@@ -93,10 +127,9 @@ header p {
     justify-content: center;
     flex-wrap: wrap;
     gap: 1rem;
-    margin-bottom: 1rem;
 }
 
- .lane-btn {
+.lane-btn {
     background: none;
     border: none;
     padding: 0;
@@ -114,51 +147,58 @@ header p {
 }
 
 .lane-btn.active img {
-    filter: drop-shadow(0 0 7px var(--accent-color) );
+    filter: drop-shadow(0 0 7px var(--accent-color));
     transform: scale(1.3);
     transition: all 0.1s ease;
 }
 
-
-/* Seção de Sorteio */
+/* =========================================
+   5. SEÇÃO DE SORTEIO (BOTÃO)
+   ========================================= */
 .randomize-section {
-    text-align: center;
-    margin-bottom: 3rem;
+    margin-top: 20px;
+    margin-bottom: 40px; 
     display: flex;
     justify-content: center;
     width: 100%;
 }
 
 #randomize-btn {
-
+    /* Visual do Botão */
     background-color: #0e1621; 
     color: var(--primary-color);
     border: 2px solid var(--border-color);
     width: 120px; 
     height: 48px;  
     padding: 0;
-    font-size: 0; 
+    font-size: 0; /* Esconde o texto "SORTEAR" */
     cursor: pointer;
     transition: all 0.3s ease;
     border-radius: 4px; 
-    box-shadow: 0 0 10px rgba(0, 234, 255, 0.3);
+    box-shadow: 0 0 10px rgba(0, 234, 255, 0.1);
+    
+    /* Centralização */
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     overflow: hidden;
-    
 }
 
 #randomize-btn .icon {
     width: 32px;
     height: 32px;
-  }
+    transition: transform 0.5s ease;
+}
 
 #randomize-btn:hover:not(:disabled) {
     background-color: var(--border-color);
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+#randomize-btn:hover:not(:disabled) img.icon {
+    transform: rotate(180deg) scale(1.1);
 }
 
 #randomize-btn:disabled {
@@ -168,6 +208,7 @@ header p {
     box-shadow: none;
 }
 
+/* Efeito de brilho passando pelo botão */
 #randomize-btn:before {
     content: '';
     position: absolute;
@@ -183,179 +224,200 @@ header p {
     left: 100%;
 }
 
-/* Exibição do Campeão */
-.champion-display {
+/* =========================================
+   6. CARD DO CAMPEÃO
+   ========================================= */
+
+/* Novo container para segurar o layout */
+.summon-stage {
+    width: 100%;
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
+    padding: 0 10px;
 }
 
 #champion-card {
-    background: var(--card-background);
-    border: 3px solid var(--border-color);
-    min-height: 600px;
-    border-radius: 8px;
-    overflow: visible;
     width: 100%;
-    max-width: 500px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    max-width: 550px; /* <--- AUMENTADO PARA 550px */
+    background: #000;
+    border: 2px solid var(--accent-color);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    border-radius: 6px;
     display: flex;
     flex-direction: column;
-    margin-bottom: 2rem;
-    transition: opacity 0.5s ease, transform 0.5s ease;
+    overflow: hidden;
+    position: relative;
 }
 
-#champion-card.hidden {
-    opacity: 1;
-    transform: translateY(0);
-    background-color: rgba(30, 35, 40, 0.5);
-    border-color: rgba(120, 90, 40, 0.3);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-
-#champion-card.hidden .champion-splash img,
-#champion-card.hidden #champion-name,
-#champion-card.hidden #champion-link {
-    opacity: 0;
-    visibility: hidden;
-}
-  
-  .champion-splash img.slide-in {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  
-
-#champion-card.hidden .champion-abilities img {
-    opacity: 0.3;
-    visibility: visible;
-    background-color: rgba(30, 35, 40, 0.5);
-    border: 1px solid rgba(120, 90, 40, 0.3);
-}
-
-#champion-card.hidden .tooltip {
-    display: none;
-}
+#champion-card.hidden { display: none !important; }
 
 #champion-card.visible {
-    opacity: 1;
-    transform: translateY(0);
+    display: flex !important;
+    animation: cardRiseUp 0.7s ease-out forwards;
 }
 
-#champion-card.visible .champion-splash img,
-#champion-card.visible #champion-name,
-#champion-card.visible .champion-abilities img,
-#champion-card.visible #champion-link {
-    opacity: 1;
-    visibility: visible;
-}
-
+/* --- A ÁREA DA IMAGEM --- */
 .champion-splash {
     width: 100%;
-    height: 0;
-    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 350px; 
     position: relative;
-    overflow: hidden;
-    border-bottom:  2px solid var(--button-color);
-
-
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; 
 }
 
-.champion-splash img {
+#champion-img {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     object-fit: cover;
-    transition: transform 0.5s ease;
+    object-position: top center;
+    z-index: 1;
 }
 
-.champion-splash:hover img {
-    transform: scale(1.05);
+/* Sombra Degradê (Para o texto aparecer) */
+.text-overlay {
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%;
+    height: 60%;
+    background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.6) 50%, transparent 100%);
+    z-index: 2;
+    pointer-events: none;
 }
 
+/* --- O TEXTO (DENTRO DA IMAGEM) --- */
 .champion-info {
-    padding: 1.5rem;
-    text-align: center;
+    position: relative;
+    z-index: 3;
+    padding: 15px;
+    padding-bottom: 10px;
+    text-align: left;
+    width: 100%;
 }
 
-.champion-info h2 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
+#champion-name {
+    font-size: 2.2rem;
+    color: #fff;
+    text-transform: uppercase;
+    line-height: 1;
+    margin: 0;
+    text-shadow: 0 2px 10px rgba(0,0,0,1);
+}
+
+#champion-title {
+    font-size: 1rem;
+    color: var(--accent-color); 
+    text-transform: uppercase;
+    margin-top: 5px;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 5px rgba(0,0,0,1);
+}
+
+/* --- A BARRA DE HABILIDADES --- */
+.champion-abilities {
+    background: #0a0a0c; 
+    padding: 12px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    border-top: 1px solid rgba(200, 155, 60, 0.3);
+    z-index: 5;
+    flex-wrap: wrap;
+    position: relative;
+}
+
+.champion-abilities img {
+    width: 42px;
+    height: 42px;
+    border: 1px solid #444;
+    background: #000;
+    border-radius: 50%; /* Mantendo redondo */
+    object-fit: cover;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.champion-abilities img:hover {
+    transform: translateY(-5px) scale(1.1);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 15px rgba(200, 155, 60, 0.5);
+    z-index: 10;
+}
+
+/* Estados especiais para imagem */
+.champion-abilities img.empty,
+.champion-abilities img.error {
+    background-color: rgba(30, 35, 40, 0.5);
+    border: 1px solid rgba(120, 90, 40, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.3;
+}
+
+/* =========================================
+   7. TOOLTIPS
+   ========================================= */
+.tooltip {
+    position: absolute;
+    bottom: 100%; /* Acima do ícone */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--card-background);
+    border: 2px solid var(--border-color);
+    border-radius: 4px;
+    padding: 10px;
+    width: 250px;
+    color: var(--text-color);
+    font-size: 0.9rem;
+    z-index: 1000;
+    
+    /* Visibilidade */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+}
+
+/* Seta do Tooltip */
+.tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 8px;
+    border-style: solid;
+    border-color: var(--border-color) transparent transparent transparent;
+}
+
+.tooltip h4 {
     color: var(--accent-color);
+    margin: 0 0 5px 0;
+    font-size: 1rem;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
-
-.champion-abilities {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
+.tooltip p {
+    margin: 0;
+    line-height: 1.4;
 }
 
-.champion-abilities img {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    border: 2px solid var(--border-color);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.champion-abilities img:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(200, 155, 60, 0.5);
-}
-
-#champion-link {
-    display: none;
-    background-color: var(--button-color);
-    color: var(--text-color);
-    text-decoration: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 4px;
-    transition: all 0.3s ease;
-    border: 1px solid var(--border-color);
-}
-
-#champion-link:hover {
-    background-color: var(--button-hover);
-    color: var(--accent-hover);
-}
-
-#randomize-again {
-    background-color: var(--button-color);
-    color: var(--text-color);
-    border: 2px solid var(--border-color);
-    padding: 0.8rem 1.5rem;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border-radius: 4px;
-    margin-top: 1rem;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.5s ease, transform 0.5s ease, background-color 0.3s ease;
-}
-
-#randomize-again.visible {
+/* Mostra tooltip ao passar o mouse na imagem anterior */
+.champion-abilities img:hover + .tooltip {
     opacity: 1;
-    transform: translateY(0);
+    visibility: visible;
 }
 
-#randomize-again:hover {
-    background-color: var(--button-hover);
-}
+/* Utilitários */
+.hidden { display: none; }
 
-.hidden {
-    display: none;
-}
-
-/* Rodapé */
+/* =========================================
+   8. RODAPÉ
+   ========================================= */
 footer {
     text-align: center;
     padding: 1.5rem;
@@ -380,105 +442,11 @@ footer a:hover {
     text-decoration: underline;
 }
 
-/* Animações */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* =========================================
+   9. ANIMAÇÕES
+   ========================================= */
+@keyframes cardRiseUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes pulse {
-    0% {
-        box-shadow: 0 0 0 0 rgba(200, 155, 60, 0.7);
-    }
-    70% {
-        box-shadow: 0 0 0 10px rgba(200, 155, 60, 0);
-    }
-    100% {
-        box-shadow: 0 0 0 0 rgba(200, 155, 60, 0);
-    }
-}
-
-/* Responsividade */
-/* @media (min-width: 768px) {
-    #champion-card {
-        flex-direction: row;
-    } */
-    
-    /* .champion-splash {
-        width: 60%;
-        height: auto;
-        padding-bottom: 0;
-    }
-    
-    .champion-info {
-        width: 40%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-} */
-
-@media (max-width: 767px) {
-    header h1 {
-        font-size: 2.2rem;
-    }
-    
-    .lane-buttons {
-        gap: 0.5rem;
-    }
-    
-    /* .lane-btn {
-        padding: 0.6rem 1rem;
-        font-size: 1rem;
-        min-width: 100px;
-    } */
-    
-    #randomize-btn {
-        padding: 0.8rem 1.5rem;
-        font-size: 1.2rem;
-    }
-    
-    .champion-info h2 {
-        font-size: 2rem;
-    }
-    
-    .champion-abilities img {
-        width: 50px;
-        height: 50px;
-    }
-}
-
-@media (max-width: 480px) {
-    .container {
-        padding: 1rem;
-    }
-    
-    header h1 {
-        font-size: 1.8rem;
-    }
-    
-    header p {
-        font-size: 1rem;
-    }
-    
-    /* .lane-btn {
-        padding: 0.5rem 0.8rem;
-        font-size: 0.9rem;
-        min-width: 80px;
-    } */
-    
-    .champion-info h2 {
-        font-size: 1.5rem;
-    }
-    
-    .champion-abilities img {
-        width: 40px;
-        height: 40px;
-    }
-}
