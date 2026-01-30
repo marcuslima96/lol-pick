@@ -39,7 +39,12 @@ const LANE_MAPPING = {
         'Yasuo', 'Yunara', 'Zeri', 'Ziggs'
     ],
     support: [
-        'Alistar'
+        'Alistar', 'Ashe', 'Bard', 'Blitzcrank', 'Brand', 'Braum', 'Elise', 
+        'Fiddlesticks', 'Janna', 'Karma', 'Leblanc', 'Leona', 'Lulu', 'Lux', 
+        'Maokai', 'Mel', 'Milio', 'Morgana', 'Nami', 'Nautilus', 'Neeko', 
+        'Pantheon', 'Poppy', 'Pyke', 'Rakan', 'Rell', 'Renata', 'Senna', 
+        'Seraphine', 'Shaco', 'Sona', 'Soraka', 'Swain', 'TahmKench', 'Taric', 
+        'Thresh', 'Velkoz', 'Xerath', 'Yuumi', 'Zilean', 'Zoe', 'Zyra'
     ]
 };
 
