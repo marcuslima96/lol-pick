@@ -8,7 +8,7 @@ const LANE_MAPPING = {
         'Renekton', 'Riven', 'Rumble', 'Ryze', 'Sejuani', 'Sett', 'Shen', 
         'Singed', 'Sion', 'Swain', 'Sylas', 'TahmKench', 'Teemo', 'Trundle', 
         'Tryndamere', 'Udyr', 'Urgot', 'Varus', 'Vayne', 'Vladimir', 'Volibear', 
-        'Warwick', 'Wukong', 'Yasuo', 'Yone', 'Yorick', 'Zaahen', 'Zac'
+        'Warwick', 'MonkeyKing', 'Yasuo', 'Yone', 'Yorick', 'Zaahen', 'Zac'
     ],
     jungle: [
         'Aatrox', 'Ambessa', 'Amumu', 'Belveth', 'Briar', 'Diana', 'DrMundo', 
@@ -18,7 +18,7 @@ const LANE_MAPPING = {
         'Naafiri', 'Nidalee', 'Nocturne', 'Nunu', 'Pantheon', 'Qiyana', 
         'Rammus', 'RekSai', 'Rengar', 'Sejuani', 'Shaco', 'Shyvana', 'Skarner', 
         'Sylas', 'Taliyah', 'Talon', 'Trundle', 'Udyr', 'Vi', 'Viego', 
-        'Volibear', 'Warwick', 'Wukong', 'XinZhao', 'Zaahen', 'Zac', 'Zed', 
+        'Volibear', 'Warwick', 'MonkeyKing', 'XinZhao', 'Zaahen', 'Zac', 'Zed', 
         'Zyra'
     ],
     mid: [
